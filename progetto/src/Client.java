@@ -21,7 +21,7 @@ public class Client implements Serializable {
             Client cli = new Client();
             System.out.println(cli.getName());
             InetAddress addr = InetAddress.getByName(null);
-            Proxy proxy = new Proxy(PORTCLIENT, addr);
+            Proxy proxy = new Proxy(PORTCLIENT, addr);   //PORTCLIENT AL POSTO DI 8888.
 
             System.out.println("Mi sono collegato al registry");
             System.out.println("Mi sono collegato al server");
@@ -31,5 +31,6 @@ public class Client implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 }

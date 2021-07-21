@@ -26,15 +26,16 @@ public class ServerThread extends Thread {
         System.err.println("I'm running");
         BufferedReader in = null;
         String MsgC = null;
-        try {
-            in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-            MsgC = in.readLine();
-            System.out.println("messaggio ricevuto dal server: " + MsgC);
-            echo(MsgC, sock);
-        } catch (IOException e) {
-            e.printStackTrace();
+        while (true) {
+            try {
+                in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+                MsgC = in.readLine();
+                System.out.println("messaggio ricevuto dal server: " + MsgC);
+                echo(MsgC, sock);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Echo eseguito");
         }
-        System.out.println("Echo eseguito");
-
     }
 }

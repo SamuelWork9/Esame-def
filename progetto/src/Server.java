@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 
 public class Server implements Serializable, ServerInterface {
-    public static final int PORTSERVER = 8887;
+    public static final int PORTSERVER = 8887; //prima era 8887
 
     public Server() {}
 

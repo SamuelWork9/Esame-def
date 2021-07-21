@@ -53,7 +53,7 @@ public class RegistryData implements RegistryInterface, Serializable {
     public void setPortServer(int portServer) {
         this.Portserver = portServer;
     }
-
+    
     public void setObject(Object obj) {
         this.obj = obj;
     }

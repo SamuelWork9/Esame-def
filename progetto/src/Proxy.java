@@ -49,7 +49,6 @@ public class Proxy {
 
             System.out.println("Messaggio spedito al server! messaggio: " + MsgC);
 
-            //ritorno
             BufferedReader in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
             MsgC = in.readLine();
             System.out.println("messaggio dal server: " + MsgC);
