@@ -1,8 +1,7 @@
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Random;
 
 public class Proxy {
     private int PORTCLIENT;
@@ -11,36 +10,51 @@ public class Proxy {
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private RegistryData dataClient;
+    private Socket serverSocket;
 
     public Proxy(int PORTCLIENT, InetAddress addr) throws IOException, ClassNotFoundException {
         this.PORTCLIENT = PORTCLIENT;
         this.addr = addr;
-        this.sock = new Socket(this.addr, this.PORTCLIENT);
-        this.dataClient = new RegistryData();
-        this.dataClient.setStr("ECHO SERVICE");
-        this.sock = new Socket(addr, this.lookup(addr, PORTCLIENT).getPortServer());
+        try {
+            this.sock = new Socket(this.addr, this.PORTCLIENT);
+            System.out.println(this.sock.toString());
+            dataClient = new RegistryData();
+            dataClient.setStr("ECHO SERVICE");
+
+            this.serverSocket = new Socket(addr, lookup(addr, PORTCLIENT).getPortServer());
+            System.out.println(this.serverSocket.toString());
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public RegistryData lookup(InetAddress addr, int PORTCLIENT ) throws IOException, ClassNotFoundException {
+        out = new ObjectOutputStream(sock.getOutputStream());
+        out.writeObject(dataClient);
+        in = new ObjectInputStream(sock.getInputStream());
+        dataClient = (RegistryData) in.readObject();
+        return dataClient;
     }
 
-    //lookup
-    public RegistryData lookup(InetAddress addr, int PORTCLIENT) throws IOException, ClassNotFoundException {
-        this.out = new ObjectOutputStream(this.sock.getOutputStream());
-        this.out.writeObject(this.dataClient);
-        this.in = new ObjectInputStream(this.sock.getInputStream());
-        this.dataClient = (RegistryData)this.in.readObject();
-        return this.dataClient;
-    }
+    public synchronized void exchangeMessage(Client cli) throws InterruptedException, IOException {
+        Random gen = new Random();
+        while (true){
+            String MsgC = cli.getName() + gen.nextInt(100) + "\n";
+            System.out.println("Stringa: " + MsgC);
 
-    public synchronized void exchangeMessage(Client cli) throws InterruptedException, IOException, ClassNotFoundException {
-        MsgClient MsgC = new MsgClient(cli.getName());
-        while(true) {
-            MsgC.generaMessaggio();
-            this.out = new ObjectOutputStream(this.sock.getOutputStream());
-            this.out.writeObject(MsgC);
-            System.out.println("Messaggio spedito al server!");
-            this.in = new ObjectInputStream(this.sock.getInputStream());
-            MsgC = (MsgClient)this.in.readObject();
-            System.out.println("messaggio dal server: " + MsgC.getEchoMessaggio());
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(serverSocket.getOutputStream()));
+            out.write(MsgC);
+            out.newLine();
+            out.flush();
+
+            System.out.println("Messaggio spedito al server! messaggio: " + MsgC);
+
+            //ritorno
+            BufferedReader in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
+            MsgC = in.readLine();
+            System.out.println("messaggio dal server: " + MsgC);
             Thread.sleep(10000);
         }
     }
 }
+

@@ -1,13 +1,15 @@
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class RegistryData implements RegistryInterface, Serializable {
-    private String Ipserver;
+    private InetAddress Ipserver;
     private int Portserver;
     private Object obj;
     private String str;
 
-    RegistryData() {
-        this.Ipserver = "";
+    RegistryData() throws UnknownHostException {
+        this.Ipserver = InetAddress.getByName(null);
         this.Portserver = 0;
         this.obj = null;
         this.str = "";
@@ -26,7 +28,7 @@ public class RegistryData implements RegistryInterface, Serializable {
     }
 
     //region getter
-    public String getIpServer(){
+    public InetAddress getIpServer(){
         return this.Ipserver;
     }
 
@@ -44,7 +46,7 @@ public class RegistryData implements RegistryInterface, Serializable {
     //endregion
 
     //region setter
-    public void setIpServer(String ipServer) {
+    public void setIpServer(InetAddress ipServer) {
         this.Ipserver = ipServer;
     }
 

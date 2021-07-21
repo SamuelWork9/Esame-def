@@ -1,3 +1,5 @@
+import java.net.InetAddress;
+
 public interface RegistryInterface {
 
     boolean bind(String s, Object obj);
@@ -6,7 +8,7 @@ public interface RegistryInterface {
 
     void put(String addr, int port);
 
-    String getIpServer();
+    InetAddress getIpServer();
 
     int getPortServer();
 }
