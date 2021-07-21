@@ -1,7 +1,8 @@
-import java.io.IOException;
-import java.rmi.Remote;
+import java.net.Socket;
 
-public interface ServerInterface extends Remote {
-    public static final int PORT = 8888;
-    public String echo(String string) throws IOException;
+public interface ServerInterface {
+
+    public static void echo(String Msg, Socket sock) {
+
+    }
 }
