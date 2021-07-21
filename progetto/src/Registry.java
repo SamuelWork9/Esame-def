@@ -23,10 +23,7 @@ public abstract class Registry extends RegistryData implements Serializable {
         PortServer = data.getPortServer();
         RmiRegistry.put(data.getStr(), data.getObject());
         
-        System.out.println("Ip server: " + IpServer.toString());
-        System.out.println("Port server: " + PortServer);
-        System.out.println("Hashtable key: " + data.getStr());
-        System.out.println("Size: " + RmiRegistry.size());
+        printer(data);
         sock.close();
     }
     
@@ -35,16 +32,20 @@ public abstract class Registry extends RegistryData implements Serializable {
         data.setPortServer(PortServer);
         data.setObject(RmiRegistry.get(data.getStr()));
     
-        System.out.println("Ip server: " + IpServer.toString());
-        System.out.println("Port server: " + PortServer);
-        System.out.println("Hashtable Key: " + data.getStr());
-        System.out.println("Size: " + RmiRegistry.size());
+        printer(data);
     
         ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
         out.writeObject(data);
         sock.close();
     }
 
+    private static void printer(RegistryData data) {
+        System.out.println("Ip server: " + IpServer.toString());
+        System.out.println("Port server: " + PortServer);
+        System.out.println("Hashtable Key: " + data.getStr());
+        System.out.println("Size: " + RmiRegistry.size());
+    }
+    
     public static void main(String[] args) {
         try {
             RmiRegistry = new Hashtable<>();
