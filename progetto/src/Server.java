@@ -29,11 +29,10 @@ public class Server implements Serializable {
 			out.writeObject(dataServer);
 			
 			while (true) {
-				ServerThread serverT = new ServerThread(srv, serverSocket.accept());
+				ServerThread serverT = new ServerThread(serverSocket.accept());
 				serverT.start();
-				System.err.println("Thread started");
+				System.err.print("Thread started");
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
