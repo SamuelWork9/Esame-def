@@ -7,14 +7,15 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Hashtable;
 
+import static java.lang.System.out;
+
 public abstract class Registry extends RegistryData implements Serializable {
 	private static final int RegistryPORT = 8888;
-	private static InetAddress IpServer;
-	private static int PortServer;
+	private static int portServer;
+	private static InetAddress ipServer;
 	private static Hashtable<String, Object> RMIRegistry;
 	
 	public Registry() throws UnknownHostException {
-		super();
 	}
 	
 	public static void main(String[] args) {
@@ -28,7 +29,7 @@ public abstract class Registry extends RegistryData implements Serializable {
 				System.err.println("Registry waiting");
 				sock = serverSock.accept();
 				
-				System.out.println("Connection accepted from: " + sock);
+				out.println("Connection accepted from: " + sock);
 				ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
 				RegistryData data = (RegistryData) in.readObject();
 				
@@ -50,25 +51,26 @@ public abstract class Registry extends RegistryData implements Serializable {
 	}
 	
 	public static void bind(RegistryData data) {
-		IpServer = data.getIpServer();
-		PortServer = data.getPortServer();
+		ipServer = data.getIpServer();
+		portServer = data.getPortServer();
 		RMIRegistry.put(data.getStr(), data.getObject());
 		
 		printer(data);
 	}
 	
 	public static void lookup(RegistryData data) {
-		data.setIpServer(IpServer);
-		data.setPortServer(PortServer);
+		data.setIpServer(ipServer);
+		data.setPortServer(portServer);
 		data.setObject(RMIRegistry.get(data.getStr()));
 		
 		printer(data);
 	}
 	
 	private static void printer(RegistryData data) {
-		System.out.println("Ip server: " + IpServer.toString());
-		System.out.println("Port server: " + PortServer);
-		System.out.println("Hashtable key: " + data.getStr());
-		System.out.println("Size: " + RMIRegistry.size());
+		out.println("\tIp server: " + ipServer.toString());
+		out.println("\tPort server: " + portServer);
+		out.println("\tHashtable key: " + data.getStr());
+		out.println("\tSize: " + RMIRegistry.size());
+		out.println();
 	}
 }
